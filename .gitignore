@@ -1,0 +1,20 @@
+# ROS 2
+ros2_ws/build/
+ros2_ws/install/
+ros2_ws/log/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Gazebo
+*.log
