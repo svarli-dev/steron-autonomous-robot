@@ -1,5 +1,4 @@
 <?xml version="1.0"?>
-
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro"
        name="steron_robot">
 
@@ -11,6 +10,14 @@
   <xacro:property name="body_width"  value="0.22"/>
   <xacro:property name="body_height" value="0.08"/>
   <xacro:property name="body_mass"   value="1.5"/>
+
+  <!-- Differential-drive geometry -->
+  <xacro:property name="wheel_radius" value="0.05"/>
+  <xacro:property name="wheel_width"  value="0.02"/>
+  <xacro:property name="wheel_mass"   value="0.10"/>
+  <xacro:property name="wheel_track"  value="0.20"/>
+  <xacro:property name="wheel_x"      value="-0.05"/>
+  <xacro:property name="wheel_z"      value="0.05"/>
 
   <!-- Box inertia for a uniform rectangular body -->
   <xacro:property
@@ -25,11 +32,15 @@
     name="izz"
     value="${body_mass / 12.0 * (body_length * body_length + body_width * body_width)}"/>
 
+
+  <!-- ==================== BASE ==================== -->
+
   <link name="base_link">
 
     <inertial>
-      <origin xyz="0 0 ${body_height / 2.0}"
-              rpy="0 0 0"/>
+      <origin
+        xyz="0 0 ${body_height / 2.0}"
+        rpy="0 0 0"/>
 
       <mass value="${body_mass}"/>
 
@@ -43,8 +54,9 @@
     </inertial>
 
     <visual>
-      <origin xyz="0 0 ${body_height / 2.0}"
-              rpy="0 0 0"/>
+      <origin
+        xyz="0 0 ${body_height / 2.0}"
+        rpy="0 0 0"/>
 
       <geometry>
         <box size="${body_length} ${body_width} ${body_height}"/>
@@ -52,8 +64,9 @@
     </visual>
 
     <collision>
-      <origin xyz="0 0 ${body_height / 2.0}"
-              rpy="0 0 0"/>
+      <origin
+        xyz="0 0 ${body_height / 2.0}"
+        rpy="0 0 0"/>
 
       <geometry>
         <box size="${body_length} ${body_width} ${body_height}"/>
@@ -61,5 +74,67 @@
     </collision>
 
   </link>
+
+
+  <!-- ==================== LEFT WHEEL ==================== -->
+
+  <link name="left_wheel_link">
+
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+
+      <mass value="${wheel_mass}"/>
+
+      <inertia
+        ixx="${wheel_mass / 12.0 * (3.0 * wheel_radius * wheel_radius + wheel_width * wheel_width)}"
+        ixy="0.0"
+        ixz="0.0"
+        iyy="${0.5 * wheel_mass * wheel_radius * wheel_radius}"
+        iyz="0.0"
+        izz="${wheel_mass / 12.0 * (3.0 * wheel_radius * wheel_radius + wheel_width * wheel_width)}"/>
+    </inertial>
+
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="${pi / 2.0} 0 0"/>
+
+      <geometry>
+        <cylinder
+          radius="${wheel_radius}"
+          length="${wheel_width}"/>
+      </geometry>
+    </visual>
+
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="${pi / 2.0} 0 0"/>
+
+      <geometry>
+        <cylinder
+          radius="${wheel_radius}"
+          length="${wheel_width}"/>
+      </geometry>
+    </collision>
+
+  </link>
+
+
+  <!-- ==================== LEFT WHEEL JOINT ==================== -->
+
+  <joint name="left_wheel_joint" type="continuous">
+
+    <parent link="base_link"/>
+    <child link="left_wheel_link"/>
+
+    <origin
+      xyz="${wheel_x} ${wheel_track / 2.0} ${wheel_z}"
+      rpy="0 0 0"/>
+
+    <axis xyz="0 1 0"/>
+
+  </joint>
+
 
 </robot>
