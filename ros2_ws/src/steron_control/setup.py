@@ -13,9 +13,9 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='serhat',
+    maintainer='Serhat',
     maintainer_email='varliserhatt@gmail.com',
-    description='TODO: Package description',
+    description='ROS 2 control nodes for the Steron autonomous mobile robot platform.',
     license='Apache-2.0',
     extras_require={
         'test': [
@@ -25,6 +25,7 @@ setup(
     entry_points={
         'console_scripts': [
             'odometry_monitor = steron_control.odometry_monitor:main',
+            'closed_loop_controller = steron_control.closed_loop_controller:main',
         ],
     },
 )
