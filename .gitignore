@@ -1,4 +1,4 @@
-# ROS 2
+# ROS 2 / Colcon
 ros2_ws/build/
 ros2_ws/install/
 ros2_ws/log/
@@ -7,6 +7,10 @@ ros2_ws/log/
 __pycache__/
 *.py[cod]
 *.egg-info/
+
+# Virtual environments
+.venv/
+venv/
 
 # IDE
 .vscode/
