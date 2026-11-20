@@ -70,9 +70,16 @@ class ClosedLoopController(Node):
         distance_taken = self.latest_x - self.initial_x
         remaining_distance = self.target_distance - distance_taken
 
-        self.get_logger().info(
-            f'Distance taken: {distance_taken: .3f} m'
+        calculated_speed = max(
+            0.0,
+            min(
+                self.kp * remaining_distance,
+                self.max_speed
+            )
         )
+
+        commanded_speed = 0.0
+
 
         if remaining_distance <= self.tolerance:
 
@@ -87,14 +94,20 @@ class ClosedLoopController(Node):
 
             move_msg = Twist()
 
-            move_msg.linear.x = min(
-                self.kp * remaining_distance,
-                self.max_speed
-            )
+            commanded_speed = calculated_speed
+
+            move_msg.linear.x = commanded_speed
 
             move_msg.angular.z = 0.0
 
             self.cmd_vel_publisher.publish(move_msg)
+        
+        self.get_logger().info(
+            f'Distance taken: {distance_taken: .3f} m | '
+            f'Remaining distance: {remaining_distance: .3f} m | '
+            f'Calculated speed: {calculated_speed: .3f} m/s | '
+            f'Commanded speed: {commanded_speed: .3f} m/s'
+        )
 
 
 
